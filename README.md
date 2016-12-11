@@ -27,18 +27,9 @@ Passed in the PAM configuration in the format `key=value` (analog to crudesaml).
 
 ## Installation
 1. Download:
-	1. Clone via git
-````
-git clone https://github.com/ck-ws/pam-script-saml.git
-````
-	2. Zipball
-````
-https://github.com/ck-ws/pam-script-saml/archive/master.zip
-````
-2. Install dependencies
-````
-composer.phar install
-````
+	1. Clone via git: `git clone https://github.com/ck-ws/pam-script-saml.git`
+	2. Zipball: `https://github.com/ck-ws/pam-script-saml/archive/master.zip`
+2. Install dependencies: `composer.phar install`
 3. Make sure the following PHP extensions are installed: dom, mbstring, mcrypt, opcache (zend_extension)
 4. Configure (see below)
 
