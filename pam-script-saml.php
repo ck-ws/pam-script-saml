@@ -28,8 +28,15 @@ if(empty($_SERVER['PAM_TYPE']) || $_SERVER['PAM_TYPE'] !== 'auth')
 
 // get necessary ENV variables
 $pamUser = $_SERVER['PAM_USER'];
-$xml = $_SERVER['PAM_AUTHTOK'];
+$xmlSrc = $_SERVER['PAM_AUTHTOK'];
 $remoteHost = $_SERVER['PAM_RHOST'];
+
+// stop here if the "assertion" is less than or equal 32 chars (that can't be a XML doc)
+if(strlen($xmlSrc) <= 32)
+{
+	echo 'No valid Assertion given: Document too short'.PHP_EOL;
+	exit(3);
+}
 
 // get arguments
 $args = array_merge(array(
@@ -61,14 +68,17 @@ if(!empty($args['only_from']) && !empty($remoteHost) && !in_array($remoteHost, e
 }
 
 // unpack assertion
-$xml = base64_decode($xml, true);
-if($xml === false)
+$xmlSrc = base64_decode($xmlSrc, true);
+if($xmlSrc === false)
 {
+	echo 'No valid Assertion given: Invalid characters in Base64 string'.PHP_EOL;
 	exit(3);
 }
-$xml = gzuncompress($xml);
+$xml = false;
+$xml = @gzuncompress($xmlSrc);
 if($xml === false)
 {
+	echo 'No valid Assertion given: Uncompress failed'.PHP_EOL;
 	exit(3);
 }
 

@@ -25,11 +25,30 @@ Passed in the PAM configuration in the format `key=value` (analog to crudesaml).
 * `trusted_sp`: EntityID of SP which should be trusted (i.e. which is in the Audience {Assertion/Conditions/AudienceRestriction/Audience}). All are allowed, if none is given (not recommended!).
 * `only_from`: Comma-separated list of IPs which can authenticate.
 
+## Installation
+1. Download:
+	1. Clone via git
+		````
+		git clone https://github.com/ck-ws/pam-script-saml.git
+		````
+	2. Zipball
+		````
+		https://github.com/ck-ws/pam-script-saml/archive/master.zip
+		````
+2. Install dependencies
+	````
+	composer.phar install
+	````
+3. Make sure the following PHP extensions are installed: dom, mbstring, mcrypt, opcache (zend_extension)
+4. Configure (see below)
+
 ## Configuration
 1. Install [pam_script](https://github.com/jeroennijhof/pam_script) from source or from your distribution.
-2. Place `pam-script-saml` in a directory of your choice.
-3. Create a symlink from `pam_script_auth` to `pam-script-saml.php`
-4. configure the PAM module in `/etc/pam.d` like this:
-````
-auth	required	pam_script.so dir=<dir> userid=mail grace=900 [...]
-````
+2. Install `pam-script-saml` in a directory of your choice (see above).
+3. Use the given `pam_script_auth` file (or create a symlink from `pam_script_auth` to `pam-script-saml.php`)
+4. configure the PAM module in `/etc/pam.d/` like this, for example:
+	````
+	auth	required	pam_script.so dir=<dir> userid=mail grace=900 [...]
+	account	required	pam_permit.so
+	session	required	pam_permit.so
+	````

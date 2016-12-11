@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+/usr/bin/env php -n -c "$DIR/php.ini" -f "$DIR/pam-script-saml.php" "$@"
