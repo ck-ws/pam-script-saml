@@ -87,12 +87,23 @@ try
 {
 	$assDeserializer = new \LightSaml\Model\Context\DeserializationContext();
 	$assDeserializer->getDocument()->loadXML($xml);
-	$assertion = new \LightSaml\Model\Assertion\Assertion();
-	$assertion->deserialize($assDeserializer->getDocument()->firstChild, $assDeserializer);
+	// Check if it's a response (for instance from mod_auth_mellon with MellonDumpResponse On),
+	// otherwise, treat it as assertion
+	if($assDeserializer->getDocument()->firstChild->localName === "Response")
+	{
+		$response = new \LightSaml\Model\Protocol\Response();
+		$response->deserialize($assDeserializer->getDocument()->firstChild, $assDeserializer);
+		$assertion = $response->getFirstAssertion();
+	}
+	else
+	{
+		$assertion = new \LightSaml\Model\Assertion\Assertion();
+		$assertion->deserialize($assDeserializer->getDocument()->firstChild, $assDeserializer);
+	}
 }
 catch(\Exception $e)
 {
-	echo 'An error occured while parsing the Assertion.'.PHP_EOL;
+	echo 'An error occured while parsing the Assertion: '.$e->getMessage().PHP_EOL;
 	exit(3);
 }
 
