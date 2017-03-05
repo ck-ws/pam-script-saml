@@ -25,6 +25,8 @@ Passed in the PAM configuration in the format `key=value` (analog to crudesaml).
 * `trusted_sp`: EntityID of SP which should be trusted (i.e. which is in the Audience {Assertion/Conditions/AudienceRestriction/Audience}). All are allowed, if none is given (not recommended!).
 * `only_from`: Comma-separated list of IPs which can authenticate.
 
+Logging can be enabled by using the `pam_script_auth` wrapper script and setting the `LOGFILE` variable. This helps troubleshooting a lot, since pam-script-saml is indicating where the validation fails.
+
 ## Installation
 1. Download:
 	1. Clone via git: `git clone https://github.com/ck-ws/pam-script-saml.git`
