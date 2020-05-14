@@ -5,7 +5,7 @@ LOGFILE=
 #LOGFILE=/tmp/pam-script-saml.log
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-OUTPUT=$(/usr/bin/env php -n -c "$DIR/php.ini" -f "$DIR/pam-script-saml.php" "$@")
+OUTPUT=$(/usr/bin/env php -c "$DIR/php.ini" -f "$DIR/pam-script-saml.php" "$@")
 RETCODE=$?
 
 if [[ -n "$LOGFILE" ]]; then

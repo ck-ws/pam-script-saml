@@ -26,7 +26,7 @@ RC=0
 START=$(date +%s)
 
 for ((i=1; i<=ITERATIONS; i++)); do
-  php -n -c "${DIR}/php.ini" \
+  php -c "${DIR}/php.ini" \
       -f "${DIR}/pam-script-saml.php" \
       userid=mail \
       idp="${IDP_METADATA_FILE}" \
