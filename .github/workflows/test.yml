@@ -1,0 +1,47 @@
+name: Test functionality and compatibility
+
+on:
+  # run on push
+  push:
+    branches: [ master ]
+  # and once every month
+  schedule:
+    - cron:  '07 16 13 * *'
+jobs:
+  run:
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: ['ubuntu-latest']
+        php-versions: ['5.3', '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
+    runs-on: ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    steps:
+     - name: Checkout
+       uses: actions/checkout@v2
+
+     - name: Setup PHP
+       uses: shivammathur/setup-php@v2
+       with:
+         php-version: ${{ matrix.php-versions }}
+         extensions: mbstring, xml, dom
+         coverage: none
+       env:
+         COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+     - name: Install Composer dependencies
+       run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+     - name: Show Composer dependencies
+       run: composer show --tree --no-interaction
+
+     - name: Run test
+       run: bash ./test.sh
+       env:
+         ITERATIONS: 500
+         IDP_METADATA: ${{ secrets.TEST_IDP_METADATA }}
+         TRUSTED_SP: ${{ secrets.TEST_TRUSTED_SP }}
+         PAM_AUTHTOK: ${{ secrets.TEST_PAM_AUTHTOK }}
+         PAM_RHOST: ${{ secrets.TEST_PAM_RHOST }}
+         PAM_TYPE: ${{ secrets.TEST_PAM_TYPE }}
+         PAM_USER: ${{ secrets.TEST_PAM_USER }}
